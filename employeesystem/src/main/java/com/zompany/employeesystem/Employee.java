@@ -23,7 +23,7 @@ public class Employee implements Serializable {
     }
 
     public void setEmpid(int empid) {
-        this.empid = empid;
+        this.empid = this.empid;
     }
 
     public String getFirstname() {

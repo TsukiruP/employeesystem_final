@@ -16,12 +16,6 @@ function Appbar() {
         <Button color="inherit" component={Link} to="/add-employee">
           Add Employee
         </Button>
-        <Button color="inherit" component={Link} to="/edit-employee">
-          Edit Employee
-        </Button>
-        <Button color="inherit" component={Link} to="/delete-employee">
-          Delete Employee
-        </Button>
         <Button color="inherit" component={Link} to="/generate-report">
           Generate Report
         </Button>

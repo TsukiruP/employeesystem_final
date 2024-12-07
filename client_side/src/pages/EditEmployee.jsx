@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Container, Paper, Button } from '@material-ui/core';
+import { useParams, useNavigate } from 'react-router-dom';  // Import necessary hooks
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,30 +12,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddEmployee() {
+export default function EditEmployee() {
   const paperStyle = { padding: '50px 20px', width: 600, margin: '20px auto' };
+  const { id } = useParams();  // Get the employee ID from the URL
+  const navigate = useNavigate();  // Initialize navigate function
+
+  // Initialize state for employee data (empty fields)
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
   const [hiredate, setHiredate] = useState('');
   const [ssn, setSsn] = useState('');
   const [salary, setSalary] = useState('');
-  const [employees, setEmployees] = useState([]);
   const classes = useStyles();
 
   const handleClick = async (e) => {
     e.preventDefault();
+  
     const employee = { firstname, lastname, email, hiredate, ssn, salary };
   
     // Check if all fields are filled
     if (!firstname || !lastname || !email || !hiredate || !ssn || !salary) {
-      alert("Please fill in all fields.");
+      alert('Please fill in all fields.');
       return;
     }
   
     try {
-      const response = await fetch('http://localhost:8080/employees', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8080/employees/${id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(employee),
       });
@@ -42,52 +47,26 @@ export default function AddEmployee() {
       const responseText = await response.text();  // Get raw response as text
       console.log('Raw response:', responseText);  // Log the raw response
   
-      if (response.status === 201 || response.status === 200) {
-        try {
-          // Display the success message from the backend
-          alert("Employee added successfully!");
-  
-          // You can parse the response to add the employee to your state if needed
-          if (response.status === 201) {
-            // Assuming responseText contains employee details
-            const newEmployee = responseText;  // Adjust based on your backend response format
-            setEmployees((prevEmployees) => [...prevEmployees, newEmployee]);
-          }
-  
-          resetForm(); // Reset the form fields after success
-        } catch (jsonError) {
-          console.error('Error parsing response as JSON:', jsonError);
-          alert('Unexpected response format');
-        }
-      } else if (response.status === 409) {
-        alert('Error: Employee with this SSN already exists');
+      if (response.status === 200) {
+        // Display success message
+        alert('Employee updated successfully!');
+        navigate(`/`); // Navigate back to the employee list or home page
       } else {
         alert(responseText || 'An unexpected error occurred.');
       }
     } catch (error) {
-      console.error('Error adding employee:', error);
-      alert('Error adding employee');
+      console.error('Error updating employee:', error);
+      alert('Error updating employee');
     }
   };
   
   
-  
-  // Reset form fields
-  const resetForm = () => {
-    setFirstname('');
-    setLastname('');
-    setEmail('');
-    setHiredate('');
-    setSsn('');
-    setSalary('');
-  };
-    
-  
+
   return (
     <Container>
       <Paper elevation={3} style={paperStyle}>
         <h1 style={{ color: 'blue' }}>
-          <u>Add Employee</u>
+          <u>Edit Employee</u>
         </h1>
 
         <form className={classes.root} noValidate autoComplete="off">
