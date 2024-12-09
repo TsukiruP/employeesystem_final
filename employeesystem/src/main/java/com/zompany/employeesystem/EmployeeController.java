@@ -3,6 +3,7 @@ package com.zompany.employeesystem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -52,4 +53,34 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> searchEmployees(
+            @RequestParam(required = false) String fullname,
+            @RequestParam(required = false) String ssn,
+            @RequestParam(required = false) Integer empid) {
+        try {
+            List<Employee> results = employeeService.searchEmployees(fullname, ssn, empid);
+            return ResponseEntity.ok(results);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+    }
+
+    @PostMapping("/increase-by-range")
+    public ResponseEntity<String> increaseSalaryByRange(@RequestParam double minSalary,
+                                                        @RequestParam double maxSalary,
+                                                        @RequestParam double percentage) {
+        int updatedCount = employeeService.increaseSalaryByRange(minSalary, maxSalary, percentage);
+        return ResponseEntity.ok(updatedCount + " employees updated.");
+    }
+
+    @PostMapping("/increase-if-less-than")
+    public ResponseEntity<String> increaseSalaryIfLessThan(@RequestParam double amount,
+                                                           @RequestParam double percentage) {
+        int updatedCount = employeeService.increaseSalaryIfLessThan(amount, percentage);
+        return ResponseEntity.ok(updatedCount + " employees updated.");
+    }
+
+
 }

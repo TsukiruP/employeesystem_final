@@ -1,5 +1,6 @@
 package com.zompany.employeesystem;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -84,5 +85,27 @@ public class EmployeeService {
         return employeeRepository.save(existingEmployee); // Save the updated employee
     }
 
+    // Search employees by name, SSN, or empid
+    public List<Employee> searchEmployees(String fullname, String ssn, Integer empid) {
+        if (fullname != null && !fullname.isEmpty()) {
+            return employeeRepository.findByName(fullname); // Adjusted for full name
+        } else if (ssn != null && !ssn.isEmpty()) {
+            return employeeRepository.findBySsn(ssn);
+        } else if (empid != null) {
+            return employeeRepository.findByEmpid(empid).map(List::of).orElse(List.of());
+        } else {
+            throw new IllegalArgumentException("At least one search parameter must be provided");
+        }
+    }
 
+    @Transactional
+    public int increaseSalaryByRange(double minSalary, double maxSalary, double percentage) {
+        return employeeRepository.updateSalaryByRange(minSalary, maxSalary, percentage);
+    }
+
+    @Transactional
+    public int increaseSalaryIfLessThan(double amount, double percentage) {
+        return employeeRepository.updateSalaryIfLessThan(amount, percentage);
+    }
+    
 }
