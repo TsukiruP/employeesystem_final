@@ -66,8 +66,8 @@ export default function UpdateSalaries() {
   return (
     <Container>
       <Paper elevation={3} style={paperStyle}>
-        <h1 style={{ color: 'blue' }}>
-          <u>Update Salaries</u>
+        <h1>
+        Update Salaries
         </h1>
 
         <form className={classes.root} noValidate autoComplete="off" onSubmit={handleRangeSubmit}>

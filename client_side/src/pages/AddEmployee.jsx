@@ -86,8 +86,8 @@ export default function AddEmployee() {
   return (
     <Container>
       <Paper elevation={3} style={paperStyle}>
-        <h1 style={{ color: 'blue' }}>
-          <u>Add Employee</u>
+        <h1>
+        Add Employee
         </h1>
 
         <form className={classes.root} noValidate autoComplete="off">

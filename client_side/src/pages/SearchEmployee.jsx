@@ -46,8 +46,8 @@ export default function SearchEmployee() {
   return (
     <Container>
       <Paper elevation={3} style={paperStyle}>
-        <h1 style={{ color: 'blue' }}>
-          <u>Search Employee</u>
+        <h1>
+        Search Employee
         </h1>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
